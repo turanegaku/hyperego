@@ -34,8 +34,9 @@ client.on('message', message => {
     message.channel.send('pong!')
   }
   //argumentを使ったこだま返し
-  if(command === "ping") {
-    message.channel.send('pong!')
+  if(command === "echo") {
+    const text = args.join(' ');
+    message.channel.send(text)
   }
 });
 
