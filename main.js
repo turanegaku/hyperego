@@ -59,15 +59,17 @@ client.on("message", message => {
   const command = args.shift().toLowerCase();
 
   if (command === "random") {
-    message.member.voiceChannel.members.forEach(member => {
-      let user = member.user;
-      // console.log(user);
-    });
     let res = filter_bukis(bukis, args[0]).map(buki => buki["name"]);
     if (!res.length) {
       message.channel.send("ブキがみつかりませんでした");
       return;
     }
+    let users = message.member.voiceChannel.members
+      .map(member => member.user)
+      .filter(user => !user.bot)
+      .forEach(user => {
+        // console.log(user);
+      });
 
     console.log(res);
   }
