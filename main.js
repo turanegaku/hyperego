@@ -14,11 +14,14 @@ const client = new discord.Client();
 const csv = require("csv");
 const fs = require("fs");
 
-let a = fs.createReadStream("buki.csv").pipe(csv.parse({ columns: true }));
-console.log(a)
+let data = fs
+  .createReadStream("buki.csv")
+  .pipe(csv.parse({ columns: true }))
+  .on("data");
 
 client.on("ready", message => {
   console.log("bot is ready!");
+  console.log(data);
 });
 
 //prefixの設定
