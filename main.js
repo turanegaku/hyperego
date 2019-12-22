@@ -14,12 +14,30 @@ const client = new discord.Client();
 const csv = require("csv");
 const fs = require("fs");
 
-let data;
+let bukis;
 fs.createReadStream("buki.csv").pipe(
   csv.parse({ columns: true }, (err, d) => {
-    data = d;
+    bukis = d;
   })
 );
+
+function filter_bukis() {
+  let tmp
+        tmp = bukis.filter(buki => buki["type"] == args[0]);
+        if (tmp.length) {
+          return tmp
+        }
+        tmp = bukis.filter(buki => buki["sub"] == args[0]);
+        if (tmp.length) {
+return tmp        }
+        tmp = bukis.filter(buki => buki["special"] == args[0]);
+        if (tmp.length) {
+return tmp        }
+        tmp = bukis.filter(buki => buki["origin"] == args[0]);
+        if (tmp.length) {
+return tmp        }
+
+}
 
 client.on("ready", message => {
   console.log("bot is ready!");
@@ -50,9 +68,12 @@ client.on("message", message => {
       let user = member.user;
       // console.log(user);
     });
-    let bukis = data;
+    let res = data;
     if (args.length) {
-      bukis = bukis.filter(buki => buki["type"] == args[0]);
+      bukis = 
+        message.channel.send("ブキがみつかりませんでした");
+        return;
+      } while (false);
     }
     let res = bukis.map(buki => buki["name"]);
     console.log(res);
