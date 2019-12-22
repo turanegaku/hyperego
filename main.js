@@ -33,13 +33,13 @@ const shuffle = ([...arr]) => {
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
   let tmp;
-  tmp = bukis.filter(buki => buki["type"] == query);
+  tmp = bukis.filter(buki => buki["type"] === query);
   if (tmp.length) return tmp;
-  tmp = bukis.filter(buki => buki["sub"] == query);
+  tmp = bukis.filter(buki => buki["sub"] === query);
   if (tmp.length) return tmp;
-  tmp = bukis.filter(buki => buki["special"] == query);
+  tmp = bukis.filter(buki => buki["special"] === query);
   if (tmp.length) return tmp;
-  tmp = bukis.filter(buki => buki["origin"] == query);
+  tmp = bukis.filter(buki => buki["origin"].includes(query));
   if (tmp.length) return tmp;
   return [];
 }
@@ -79,12 +79,13 @@ client.on("message", message => {
     }
     res = res.concat(res);
     while (res.length < users.length) res = res.concat(res);
-    res = shuffle(res)
+    res = shuffle(res);
 
-    users.forEach((user, i => {
-      let i = Math.floor(Math.random() * res.length)
-      
-    })
+    let ret = "";
+    users.forEach((user, i) => {
+      ret += `${user.username}: ${res[i]}`;
+    });
+    message.channel.send(ret);
   }
 });
 
