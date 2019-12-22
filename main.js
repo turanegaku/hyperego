@@ -41,16 +41,18 @@ function filter_bukis(bukis, query) {
         .map(buki => buki[query])
         .filter((x, i, self) => self.indexOf(x) === i)
     )[0];
-    console.log(query)
-    return filter_bukis(bukis, query);
+    let ret = filter_bukis(bukis, query);
+    ret.query = query;
+    return ret;
   }
 
   let tmp;
-  headers.forEach(header => {
+  for (let header of headers) {
     tmp = bukis.filter(buki => buki[header] == query);
-    console.log(header, query)
     if (tmp.length) return tmp;
-  });
+  }
+  tmp = bukis.filter(buki => buki["origin"].includes(query));
+  if (tmp.length) return tmp;
   return [];
 }
 
@@ -84,12 +86,13 @@ client.on("message", message => {
 
     let ret = res[0];
     message.channel.send(ret);
-  } else if (command === "random") {
-    let users = message.member.voiceChannel.members
-      .map(member => member.user)
-      .filter(user => !user.bot);
-
+  } else if (command === "nrandom") {
+    if (typeof args[0] !== "number") {
+        help(message.channel)
+      return
+        }
     let res = filter_bukis(bukis, args[0]);
+    let query = res.query;
 
     if (!res.length) {
       message.channel.send("ブキがみつかりませんでした");
@@ -99,7 +102,28 @@ client.on("message", message => {
     while (res.length < users.length) res = res.concat(res);
     res = shuffle(res).map(buki => buki["name"]);
 
-    let ret = "";
+    let ret = query || "";
+    users.forEach((user, i) => {
+      ret += `\n${user.username}: ${res[i]}`;
+    });
+    message.channel.send(ret);
+  } else if (command === "random") {
+    let users = message.member.voiceChannel.members
+      .map(member => member.user)
+      .filter(user => !user.bot);
+
+    let res = filter_bukis(bukis, args[0]);
+    let query = res.query;
+
+    if (!res.length) {
+      message.channel.send("ブキがみつかりませんでした");
+      return;
+    }
+    res = res.concat(res);
+    while (res.length < users.length) res = res.concat(res);
+    res = shuffle(res).map(buki => buki["name"]);
+
+    let ret = query || "";
     users.forEach((user, i) => {
       ret += `\n${user.username}: ${res[i]}`;
     });
