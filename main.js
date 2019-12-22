@@ -56,6 +56,8 @@ function filter_bukis(bukis, query) {
   return [];
 }
 
+function help(message) {}
+
 client.on("ready", message => {
   console.log("bot is ready!");
 });
@@ -84,14 +86,17 @@ client.on("message", message => {
     }
     res = shuffle(res).map(buki => buki["name"]);
 
-    let ret = res[0];
+    let ret = "```";
+    ret += res[0];
+    ret += "```";
     message.channel.send(ret);
   } else if (command === "nrandom") {
-    if (typeof args[0] !== "number") {
-        help(message.channel)
-      return
-        }
-    let res = filter_bukis(bukis, args[0]);
+    let n = parseInt(args[0]);
+    if (isNaN(n)) {
+      help(message.channel);
+      return;
+    }
+    let res = filter_bukis(bukis, args[1]);
     let query = res.query;
 
     if (!res.length) {
@@ -99,13 +104,15 @@ client.on("message", message => {
       return;
     }
     res = res.concat(res);
-    while (res.length < users.length) res = res.concat(res);
+    while (res.length < args[0]) res = res.concat(res);
     res = shuffle(res).map(buki => buki["name"]);
 
-    let ret = query || "";
-    users.forEach((user, i) => {
-      ret += `\n${user.username}: ${res[i]}`;
-    });
+    let ret = "```";
+    ret += query || "";
+    for (let i = 0; i < n; i++) {
+      ret += `\n${res[i]}`;
+    }
+    ret += "```";
     message.channel.send(ret);
   } else if (command === "random") {
     let users = message.member.voiceChannel.members
@@ -123,10 +130,12 @@ client.on("message", message => {
     while (res.length < users.length) res = res.concat(res);
     res = shuffle(res).map(buki => buki["name"]);
 
-    let ret = query || "";
+    let ret = "```";
+    ret += query || "";
     users.forEach((user, i) => {
       ret += `\n${user.username}: ${res[i]}`;
     });
+    ret += "```";
     message.channel.send(ret);
   }
 });
