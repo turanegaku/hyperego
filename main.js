@@ -21,22 +21,18 @@ fs.createReadStream("buki.csv").pipe(
   })
 );
 
-function filter_bukis() {
-  let tmp
-        tmp = bukis.filter(buki => buki["type"] == args[0]);
-        if (tmp.length) {
-          return tmp
-        }
-        tmp = bukis.filter(buki => buki["sub"] == args[0]);
-        if (tmp.length) {
-return tmp        }
-        tmp = bukis.filter(buki => buki["special"] == args[0]);
-        if (tmp.length) {
-return tmp        }
-        tmp = bukis.filter(buki => buki["origin"] == args[0]);
-        if (tmp.length) {
-return tmp        }
-
+function filter_bukis(bukis, query) {
+  if (!query) return bukis;
+  let tmp;
+  tmp = bukis.filter(buki => buki["type"] == query);
+  if (tmp.length) return tmp;
+  tmp = bukis.filter(buki => buki["sub"] == query);
+  if (tmp.length) return tmp;
+  tmp = bukis.filter(buki => buki["special"] == query);
+  if (tmp.length) return tmp;
+  tmp = bukis.filter(buki => buki["origin"] == query);
+  if (tmp.length) return tmp;
+  return [];
 }
 
 client.on("ready", message => {
@@ -62,20 +58,17 @@ client.on("message", message => {
     .split(/ +/g);
   const command = args.shift().toLowerCase();
 
-  //!pingと打ったらpong!が帰ってくる
   if (command === "random") {
     message.member.voiceChannel.members.forEach(member => {
       let user = member.user;
       // console.log(user);
     });
-    let res = data;
-    if (args.length) {
-      bukis = 
-        message.channel.send("ブキがみつかりませんでした");
-        return;
-      } while (false);
+    let res = filter_bukis(bukis, args[0]).map(buki => buki["name"]);
+    if (!res.length) {
+      message.channel.send("ブキがみつかりませんでした");
+      return;
     }
-    let res = bukis.map(buki => buki["name"]);
+
     console.log(res);
   }
 });
