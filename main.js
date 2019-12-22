@@ -5,11 +5,8 @@ const fs = require("fs");
 const http = require("http");
 http
   .createServer(function(request, response) {
-    fs.readFile("index.html", "utf-8", (err, data) => {
-      response.writeHead(200, { "Content-Type": "text/html" });
-      response.write(data);
-      response.end();
-    });
+    response.writeHead(200, { "Content-Type": "text/plain" });
+    response.end("Discord bot is active now \n");
   })
   .listen(8080);
 
@@ -35,6 +32,11 @@ const shuffle = ([...arr]) => {
 
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
+  switch(query) {
+    case "type":
+      return filter_bukis(bukis, )
+  }
+    
   let tmp;
   tmp = bukis.filter(buki => buki["type"] === query);
   if (tmp.length) return tmp;
