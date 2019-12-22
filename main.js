@@ -33,7 +33,6 @@ const shuffle = ([...arr]) => {
 const headers = ["sub", "special", "type", "origin"];
 
 function filter_bukis(bukis, query) {
-  bukis.query = query
   if (!query) return bukis;
 
   if (headers.indexOf(query) !== -1) {
@@ -42,11 +41,7 @@ function filter_bukis(bukis, query) {
         .map(buki => buki[query])
         .filter((x, i, self) => self.indexOf(x) === i)
     )[0];
-    console.log(query);
-    let ret = filter_bukis(bukis, query);
-    ret.query = query
-
-    return ret
+    return [filter_bukis(bukis, query), query];
   }
 
   let tmp;
@@ -71,10 +66,6 @@ const prefix = "!";
 client.on("message", message => {
   //botに反応しなくなる奴
   if (message.author.bot) return;
-  //メンションが来たら｢呼びましたか？｣と返す
-  if (message.isMemberMentioned(client.user)) {
-    message.reply("呼びましたか？");
-  }
   //argumentなどの処理
   if (message.content.indexOf(prefix) !== 0) return;
 
@@ -84,13 +75,30 @@ client.on("message", message => {
     .split(/ +/g);
   const command = args.shift().toLowerCase();
 
-  if (command === "random") {
+  if (command === "arandom") {
+    let res = filter_bukis(bukis, args[0]);
+    let query = res[1];
+    res = res[0];
+
+    if (!res.length) {
+      message.channel.send("ブキがみつかりませんでした");
+      return;
+    }
+    res = res.map(buki => buki["name"]);
+
+    res = shuffle(res);
+
+    let ret = `${query || ""}\n${res[0]}`;
+    message.channel.send(ret);
+  } else if (command === "random") {
     let users = message.member.voiceChannel.members
       .map(member => member.user)
       .filter(user => !user.bot);
 
-    let res = filter_bukis(bukis, args[0]).map(buki => buki["name"]);
-        console.log(res.query);
+    let res = filter_bukis(bukis, args[0]);
+    let query = res[1];
+    res = res[0];
+    res = res.map(buki => buki["name"]);
 
     if (!res.length) {
       message.channel.send("ブキがみつかりませんでした");
@@ -100,8 +108,7 @@ client.on("message", message => {
     while (res.length < users.length) res = res.concat(res);
     res = shuffle(res);
 
-    let ret = res.query || "";
-    console.log(ret);
+    let ret = query || "";
     users.forEach((user, i) => {
       ret += `\n${user.username}: ${res[i]}`;
     });
