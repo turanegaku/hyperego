@@ -1,18 +1,21 @@
+const csv = require("csv");
+const fs = require("fs");
+
 // Response for Uptime Robot
 const http = require("http");
 http
   .createServer(function(request, response) {
-    response.writeHead(200, { "Content-Type": "text/plain" });
-    response.end("Discord bot is active now \n");
+    fs.readFile("index.html", "utf-8", (err, data) => {
+      response.writeHead(200, { "Content-Type": "text/html" });
+      response.write(data);
+      response.end();
+    });
   })
   .listen(8080);
 
 // Discord bot implements
 const discord = require("discord.js");
 const client = new discord.Client();
-
-const csv = require("csv");
-const fs = require("fs");
 
 let bukis;
 fs.createReadStream("buki.csv").pipe(

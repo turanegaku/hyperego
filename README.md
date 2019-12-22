@@ -14,4 +14,4 @@ Applications on `glitch.com` may sleep when keep no access for 5 minutes.
 You must ping application URL every 5 minutes to run your bot continuously.
 Using `uptimerobot.com` service is just good.
 
-(remake by.zel) https://glitch.com/~discordbot-example-js
+(remake by.zel) https://hyperego.glitch.me
