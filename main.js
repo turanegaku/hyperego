@@ -57,7 +57,8 @@ function filter_bukis(bukis, query) {
 }
 
 function help(channel) {
-  channel.send("```\n\
+  channel.send(
+    "```\n\
 $random [query]\n\
   通話部屋にいる人で武器ランダム\n\
   query: 一番左のを指定したときはそれもランダムで決める\n\
@@ -72,12 +73,13 @@ $nrandom [num] [query]\n\
   numつだけ選出\n\
 $help\n\
   helpを表示\n\
-```");
+```"
+  );
 }
 
 client.on("ready", message => {
   console.log("bot is ready!");
-  client.user.setActivity("$help")
+  client.user.setActivity("$help");
 });
 
 //prefixの設定
@@ -106,8 +108,7 @@ client.on("message", message => {
       }
       res = shuffle(res).map(buki => buki["name"]);
 
-      ret += `query` || "";
-      let ret = "```";
+      let ret = `${query || ""}\n\`\`\``;
       ret += res[0];
       ret += "```";
       message.channel.send(ret);
@@ -130,8 +131,7 @@ client.on("message", message => {
       while (res.length < args[0]) res = res.concat(res);
       res = shuffle(res).map(buki => buki["name"]);
 
-      let ret = "```";
-      ret += query || "";
+      let ret = `${query || ""}\n\`\`\``;
       for (let i = 0; i < n; i++) {
         ret += `\n${res[i]}`;
       }
@@ -140,6 +140,12 @@ client.on("message", message => {
       break;
     }
     case "random": {
+      if (!message.member.voiceChannel) {
+        message.channel.send(
+          "Voice Channelに入ってから使用するか$arandomを使用してください"
+        );
+        return;
+      }
       let users = message.member.voiceChannel.members
         .map(member => member.user)
         .filter(user => !user.bot);
@@ -155,8 +161,7 @@ client.on("message", message => {
       while (res.length < users.length) res = res.concat(res);
       res = shuffle(res).map(buki => buki["name"]);
 
-      let ret = "```";
-      ret += query || "";
+      let ret = `${query || ""}\n\`\`\``;
       users.forEach((user, i) => {
         ret += `\n${user.username}: ${res[i]}`;
       });
