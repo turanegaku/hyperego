@@ -30,10 +30,10 @@ const shuffle = ([...arr]) => {
   return arr;
 };
 
-const headers = ["sub", "special", "type", "origin"];
+const headers = ["type", "sub", "special", "origin"];
 
 function filter_bukis(bukis, query) {
-  if (!query) return bukis;
+  if (!query) return [bukis, ""];
 
   if (headers.indexOf(query) !== -1) {
     query = shuffle(
@@ -45,15 +45,11 @@ function filter_bukis(bukis, query) {
   }
 
   let tmp;
-  tmp = bukis.filter(buki => buki["type"] === query);
-  if (tmp.length) return tmp;
-  tmp = bukis.filter(buki => buki["sub"] === query);
-  if (tmp.length) return tmp;
-  tmp = bukis.filter(buki => buki["special"] === query);
-  if (tmp.length) return tmp;
-  tmp = bukis.filter(buki => buki["origin"].includes(query));
-  if (tmp.length) return tmp;
-  return [];
+  headers.forEach(header => {
+    tmp = bukis.filter(buki => buki[header] === query);
+    if (tmp.length) return [tmp, ""];
+  });
+  return [[], ""];
 }
 
 client.on("ready", message => {
@@ -84,9 +80,7 @@ client.on("message", message => {
       message.channel.send("ブキがみつかりませんでした");
       return;
     }
-    res = res.map(buki => buki["name"]);
-
-    res = shuffle(res);
+    res = shuffle(res).map(buki => buki["name"]);
 
     let ret = `${query || ""}\n${res[0]}`;
     message.channel.send(ret);
@@ -96,9 +90,10 @@ client.on("message", message => {
       .filter(user => !user.bot);
 
     let res = filter_bukis(bukis, args[0]);
+
+    console.log(res);
     let query = res[1];
     res = res[0];
-    res = res.map(buki => buki["name"]);
 
     if (!res.length) {
       message.channel.send("ブキがみつかりませんでした");
@@ -106,7 +101,7 @@ client.on("message", message => {
     }
     res = res.concat(res);
     while (res.length < users.length) res = res.concat(res);
-    res = shuffle(res);
+    res = shuffle(res).map(buki => buki["name"]);
 
     let ret = query || "";
     users.forEach((user, i) => {
