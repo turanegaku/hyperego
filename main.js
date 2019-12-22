@@ -14,14 +14,15 @@ const client = new discord.Client();
 const csv = require("csv");
 const fs = require("fs");
 
-let data = fs
-  .createReadStream("buki.csv")
-  .pipe(csv.parse({ columns: true }))
-  .on("data");
+let data;
+fs.createReadStream("buki.csv").pipe(
+  csv.parse({ columns: true }, (err, d) => {
+    data = d;
+  })
+);
 
 client.on("ready", message => {
   console.log("bot is ready!");
-  console.log(data);
 });
 
 //prefixの設定
@@ -49,6 +50,14 @@ client.on("message", message => {
       let user = member.user;
       console.log(user);
     });
+    let bukis = data;
+    if (args.length) {
+      bukis = bukis.fillter(buki => {
+        buki["種類"] == args[1];
+      });
+    }
+    bukis.map(buki => buki["名前"]);
+    console.log(bukis);
   }
 });
 
