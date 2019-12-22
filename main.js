@@ -33,7 +33,7 @@ const shuffle = ([...arr]) => {
 const headers = ["type", "sub", "special", "origin"];
 
 function filter_bukis(bukis, query) {
-  if (!query) return [bukis, ""];
+  if (!query) return bukis;
 
   if (headers.indexOf(query) !== -1) {
     query = shuffle(
@@ -41,15 +41,17 @@ function filter_bukis(bukis, query) {
         .map(buki => buki[query])
         .filter((x, i, self) => self.indexOf(x) === i)
     )[0];
-    return [filter_bukis(bukis, query), query];
+    console.log(query)
+    return filter_bukis(bukis, query);
   }
 
   let tmp;
   headers.forEach(header => {
-    tmp = bukis.filter(buki => buki[header] === query);
-    if (tmp.length) return [tmp, ""];
+    tmp = bukis.filter(buki => buki[header] == query);
+    console.log(header, query)
+    if (tmp.length) return tmp;
   });
-  return [[], ""];
+  return [];
 }
 
 client.on("ready", message => {
@@ -73,8 +75,6 @@ client.on("message", message => {
 
   if (command === "arandom") {
     let res = filter_bukis(bukis, args[0]);
-    let query = res[1];
-    res = res[0];
 
     if (!res.length) {
       message.channel.send("ブキがみつかりませんでした");
@@ -82,7 +82,7 @@ client.on("message", message => {
     }
     res = shuffle(res).map(buki => buki["name"]);
 
-    let ret = `${query || ""}\n${res[0]}`;
+    let ret = res[0];
     message.channel.send(ret);
   } else if (command === "random") {
     let users = message.member.voiceChannel.members
@@ -90,10 +90,6 @@ client.on("message", message => {
       .filter(user => !user.bot);
 
     let res = filter_bukis(bukis, args[0]);
-
-    console.log(res);
-    let query = res[1];
-    res = res[0];
 
     if (!res.length) {
       message.channel.send("ブキがみつかりませんでした");
@@ -103,7 +99,7 @@ client.on("message", message => {
     while (res.length < users.length) res = res.concat(res);
     res = shuffle(res).map(buki => buki["name"]);
 
-    let ret = query || "";
+    let ret = "";
     users.forEach((user, i) => {
       ret += `\n${user.username}: ${res[i]}`;
     });
