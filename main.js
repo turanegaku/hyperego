@@ -56,14 +56,23 @@ function filter_bukis(bukis, query) {
   return [];
 }
 
-function help(message) {}
+function help(channel) {
+  channel.send("```\n\
+random [query]: 武器ランダム\n\
+  通話に参加しているユーザに武器をふりわける
+  query: '' | シューター | クイックボム | スーパーチャクチ | わかば ...
+  arandom [query]: 一つだけ選出
+  nrandom [num] [query]: numつだけ選出
+  help: helpを表示
+```");
+}
 
 client.on("ready", message => {
   console.log("bot is ready!");
 });
 
 //prefixの設定
-const prefix = "!";
+const prefix = ":";
 
 client.on("message", message => {
   //botに反応しなくなる奴
@@ -77,66 +86,75 @@ client.on("message", message => {
     .split(/ +/g);
   const command = args.shift().toLowerCase();
 
-  if (command === "arandom") {
-    let res = filter_bukis(bukis, args[0]);
+  switch (command) {
+    case "arandom": {
+      let res = filter_bukis(bukis, args[0]);
 
-    if (!res.length) {
-      message.channel.send("ブキがみつかりませんでした");
-      return;
+      if (!res.length) {
+        message.channel.send("ブキがみつかりませんでした");
+        return;
+      }
+      res = shuffle(res).map(buki => buki["name"]);
+
+      let ret = "```";
+      ret += res[0];
+      ret += "```";
+      message.channel.send(ret);
+      break;
     }
-    res = shuffle(res).map(buki => buki["name"]);
+    case "nrandom": {
+      let n = parseInt(args[0]);
+      if (isNaN(n)) {
+        help(message.channel);
+        return;
+      }
+      let res = filter_bukis(bukis, args[1]);
+      let query = res.query;
 
-    let ret = "```";
-    ret += res[0];
-    ret += "```";
-    message.channel.send(ret);
-  } else if (command === "nrandom") {
-    let n = parseInt(args[0]);
-    if (isNaN(n)) {
+      if (!res.length) {
+        message.channel.send("ブキがみつかりませんでした");
+        return;
+      }
+      res = res.concat(res);
+      while (res.length < args[0]) res = res.concat(res);
+      res = shuffle(res).map(buki => buki["name"]);
+
+      let ret = "```";
+      ret += query || "";
+      for (let i = 0; i < n; i++) {
+        ret += `\n${res[i]}`;
+      }
+      ret += "```";
+      message.channel.send(ret);
+      break;
+    }
+    case "random": {
+      let users = message.member.voiceChannel.members
+        .map(member => member.user)
+        .filter(user => !user.bot);
+
+      let res = filter_bukis(bukis, args[0]);
+      let query = res.query;
+
+      if (!res.length) {
+        message.channel.send("ブキがみつかりませんでした");
+        return;
+      }
+      res = res.concat(res);
+      while (res.length < users.length) res = res.concat(res);
+      res = shuffle(res).map(buki => buki["name"]);
+
+      let ret = "```";
+      ret += query || "";
+      users.forEach((user, i) => {
+        ret += `\n${user.username}: ${res[i]}`;
+      });
+      ret += "```";
+      message.channel.send(ret);
+      break;
+    }
+    case "help":
       help(message.channel);
-      return;
-    }
-    let res = filter_bukis(bukis, args[1]);
-    let query = res.query;
-
-    if (!res.length) {
-      message.channel.send("ブキがみつかりませんでした");
-      return;
-    }
-    res = res.concat(res);
-    while (res.length < args[0]) res = res.concat(res);
-    res = shuffle(res).map(buki => buki["name"]);
-
-    let ret = "```";
-    ret += query || "";
-    for (let i = 0; i < n; i++) {
-      ret += `\n${res[i]}`;
-    }
-    ret += "```";
-    message.channel.send(ret);
-  } else if (command === "random") {
-    let users = message.member.voiceChannel.members
-      .map(member => member.user)
-      .filter(user => !user.bot);
-
-    let res = filter_bukis(bukis, args[0]);
-    let query = res.query;
-
-    if (!res.length) {
-      message.channel.send("ブキがみつかりませんでした");
-      return;
-    }
-    res = res.concat(res);
-    while (res.length < users.length) res = res.concat(res);
-    res = shuffle(res).map(buki => buki["name"]);
-
-    let ret = "```";
-    ret += query || "";
-    users.forEach((user, i) => {
-      ret += `\n${user.username}: ${res[i]}`;
-    });
-    ret += "```";
-    message.channel.send(ret);
   }
 });
 
