@@ -21,6 +21,15 @@ fs.createReadStream("buki.csv").pipe(
   })
 );
 
+const shuffle = ([...arr]) => {
+  let m = arr.length;
+  while (m) {
+    const i = Math.floor(Math.random() * m--);
+    [arr[m], arr[i]] = [arr[i], arr[m]];
+  }
+  return arr;
+};
+
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
   let tmp;
@@ -59,19 +68,23 @@ client.on("message", message => {
   const command = args.shift().toLowerCase();
 
   if (command === "random") {
+    let users = message.member.voiceChannel.members
+      .map(member => member.user)
+      .filter(user => !user.bot);
+
     let res = filter_bukis(bukis, args[0]).map(buki => buki["name"]);
     if (!res.length) {
       message.channel.send("ブキがみつかりませんでした");
       return;
     }
-    let users = message.member.voiceChannel.members
-      .map(member => member.user)
-      .filter(user => !user.bot)
-      .forEach(user => {
-        // console.log(user);
-      });
+    res = res.concat(res);
+    while (res.length < users.length) res = res.concat(res);
+    res = shuffle(res)
 
-    console.log(res);
+    users.forEach((user, i => {
+      let i = Math.floor(Math.random() * res.length)
+      
+    })
   }
 });
 
