@@ -48,16 +48,14 @@ client.on("message", message => {
   if (command === "random") {
     message.member.voiceChannel.members.forEach(member => {
       let user = member.user;
-      console.log(user);
+      // console.log(user);
     });
     let bukis = data;
     if (args.length) {
-      bukis = bukis.fillter(buki => {
-        buki["種類"] == args[1];
-      });
+      bukis = bukis.filter(buki => buki["type"] == args[0]);
     }
-    bukis.map(buki => buki["名前"]);
-    console.log(bukis);
+    let res = bukis.map(buki => buki["name"]);
+    console.log(res);
   }
 });
 
