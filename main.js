@@ -30,13 +30,8 @@ client.on('message', message => {
   const command = args.shift().toLowerCase();
   
   //!pingと打ったらpong!が帰ってくる
-  if(command === "ping") {
-    message.channel.send('pong!')
-  }
-  //argumentを使ったこだま返し
-  if(command === "echo") {
-    const text = args.join(' ');
-    message.channel.send(text)
+  if(command === "random") {
+    console.log(message.member.voiceChannel.members)
   }
 });
 
