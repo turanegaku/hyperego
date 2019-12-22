@@ -58,21 +58,25 @@ function filter_bukis(bukis, query) {
 
 function help(channel) {
   channel.send("```\n\
-random [query]: 武器ランダム\n\
-  通話に参加しているユーザに武器をふりわける
-  query: '' | シューター | クイックボム | スーパーチャクチ | わかば ...
-  arandom [query]: 一つだけ選出
-  nrandom [num] [query]: numつだけ選出
-  help: helpを表示
+$random [query]\n\
+  武器ランダム\n\
+  query:'' | シューター | クイックボム | スーパーチャクチ | わかば ...\n\
+$arandom [query]\n\
+  一つだけ選出\n\
+$nrandom [num] [query]\n\
+  numつだけ選出\n\
+$help\n\
+  helpを表示\n\
 ```");
 }
 
 client.on("ready", message => {
   console.log("bot is ready!");
+  client.user.setActivity("$help")
 });
 
 //prefixの設定
-const prefix = ":";
+const prefix = "$";
 
 client.on("message", message => {
   //botに反応しなくなる奴
