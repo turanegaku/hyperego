@@ -59,8 +59,13 @@ function filter_bukis(bukis, query) {
 function help(channel) {
   channel.send("```\n\
 $random [query]\n\
-  武器ランダム\n\
-  query:'' | シューター | クイックボム | スーパーチャクチ | わかば ...\n\
+  通話部屋にいる人で武器ランダム\n\
+  query: 一番左のを指定したときはそれもランダムで決める\n\
+    type | シューター | スピナー ...: 武器種類固定ランダム\n\
+    sub | クイックボム | スプリンクラー...: サブ固定ランダム\n\
+    special | スーパーチャクチ | ナイスダマ...: スペシャル固定ランダム\n\
+    origin | わかば | ハイドラ...: 派生武器のみでランダム(ex. わかば|もみじ|おちば)\n\
+      (originは部分文字列を許容する)\n\
 $arandom [query]\n\
   一つだけ選出\n\
 $nrandom [num] [query]\n\
@@ -93,6 +98,7 @@ client.on("message", message => {
   switch (command) {
     case "arandom": {
       let res = filter_bukis(bukis, args[0]);
+      let query = res.query;
 
       if (!res.length) {
         message.channel.send("ブキがみつかりませんでした");
@@ -100,6 +106,7 @@ client.on("message", message => {
       }
       res = shuffle(res).map(buki => buki["name"]);
 
+      ret += `query` || "";
       let ret = "```";
       ret += res[0];
       ret += "```";
