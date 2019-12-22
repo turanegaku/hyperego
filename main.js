@@ -31,9 +31,9 @@ client.on('message', message => {
   
   //!pingと打ったらpong!が帰ってくる
   if(command === "random") {
-    message.member.voiceChannel.members.forEach((member, _) => {
+    message.member.voiceChannel.members.forEach(member => {
       let user = member.user
-      console.log(member)
+      console.log(user)
     })
   }
 });
