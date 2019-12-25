@@ -128,7 +128,7 @@ client.on("message", message => {
         return;
       }
       res = res.concat(res);
-      while (res.length < args[0]) res = res.concat(res);
+      while (res.length < n) res = res.concat(res);
       res = shuffle(res).map(buki => buki["name"]);
 
       let ret = `${query || ""}\n\`\`\``;
@@ -165,6 +165,27 @@ client.on("message", message => {
       users.forEach((user, i) => {
         ret += `\n${user.username}: ${res[i]}`;
       });
+      ret += "```";
+      message.channel.send(ret);
+      break;
+    }
+    case "di-salmon": {
+      let n = parseInt(args[0]);
+      if (isNaN(n)) {
+        help(message.channel);
+        return;
+      }
+      let res = ["バクダン", "カタパッド", "テッパン", "ヘビ", "タワー", "モグラ", "コウモリ"]
+      if (args[1])
+
+      res = res.concat(res).concat(res);
+      while (res.length < n) res = res.concat(res);
+      res = shuffle(res).map(buki => buki["name"]);
+
+      let ret = `${query || ""}\n\`\`\``;
+      for (let i = 0; i < n; i++) {
+        ret += `\n${res[i]}`;
+      }
       ret += "```";
       message.channel.send(ret);
       break;
