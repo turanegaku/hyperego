@@ -175,14 +175,25 @@ client.on("message", message => {
         help(message.channel);
         return;
       }
-      let res = ["バクダン", "カタパッド", "テッパン", "ヘビ", "タワー", "モグラ", "コウモリ"]
-      if (args[1])
+      let res = [
+        [0, "バクダン"],
+        [1, "カタパッド"],
+        [2, "テッパン"],
+        [3, "ヘビ"],
+        [4, "タワー"],
+        [5, "モグラ"],
+        [6, "コウモリ"]
+      ];
+      if (args[1] == "+") res.push([7, "納品"]);
 
       res = res.concat(res).concat(res);
       while (res.length < n) res = res.concat(res);
-      res = shuffle(res).map(buki => buki["name"]);
+      res = shuffle(res)
+        .slice(0, n)
+        .sort()
+        .map(v => v[1]);
 
-      let ret = `${query || ""}\n\`\`\``;
+      let ret = "```";
       for (let i = 0; i < n; i++) {
         ret += `\n${res[i]}`;
       }
