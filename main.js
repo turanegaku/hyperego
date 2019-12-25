@@ -71,6 +71,8 @@ $arandom [query]\n\
   一つだけ選出\n\
 $nrandom [num] [query]\n\
   numつだけ選出\n\
+$di-salmon [num] (+)\n\
+  討伐禁止サーモン用\n\
 $help\n\
   helpを表示\n\
 ```"
