@@ -1,7 +1,6 @@
 const csv = require("csv");
 const fs = require("fs");
-const https = require('https');
-
+const req = require("https");
 
 // Response for Uptime Robot
 const http = require("http");
@@ -9,10 +8,13 @@ http
   .createServer(function(request, response) {
     response.writeHead(200, { "Content-Type": "text/plain" });
     response.end("Discord bot is active now \n");
-  
-    setInterval()
-    https.request('https://glitch.com/~hyperego');
 
+    const live = setInterval(() => {
+      req.request("https://glitch.com/~hyperego");
+    }, 1000 * 4.5);
+    setTimeout(() => {
+      clearInterval(live)
+    }, 1000 * 60 * 60 * 2);
   })
   .listen(8080);
 
