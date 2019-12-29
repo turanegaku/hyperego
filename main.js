@@ -37,6 +37,7 @@ function filter_bukis(bukis, query) {
   if (!query) return bukis;
   if (Array.isArray(query)) {
     const ret = []
+    const mret = []
     for (let q of query) {
       if (q[0] == '-') {
         
