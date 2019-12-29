@@ -8,13 +8,6 @@ http
   .createServer(function(request, response) {
     response.writeHead(200, { "Content-Type": "text/plain" });
     response.end("Discord bot is active now \n");
-
-    const live = setInterval(() => {
-      req.request("https://glitch.com/~hyperego");
-    }, 1000 * 4.5);
-    setTimeout(() => {
-      clearInterval(live)
-    }, 1000 * 60 * 60 * 2);
   })
   .listen(8080);
 
@@ -42,6 +35,12 @@ const headers = ["type", "sub", "special", "origin"];
 
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
+  if (Array.isArray(query)) {
+    const ret = []
+    for (let q in query) {
+      
+    }
+  }
 
   if (headers.indexOf(query) !== -1) {
     query = shuffle(
