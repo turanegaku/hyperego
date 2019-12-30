@@ -36,11 +36,10 @@ const headers = ["type", "sub", "special", "origin"];
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
   if (Array.isArray(query)) {
-    const ret = []
-    const mret = []
+    const ret = [];
+    const mret = [];
     for (let q of query) {
-      if (q[0] == '-') {
-        
+      if (q[0] == "-") {
       }
     }
   }
@@ -50,6 +49,7 @@ function filter_bukis(bukis, query) {
       bukis
         .map(buki => buki[query])
         .filter((x, i, self) => self.indexOf(x) === i)
+        .filter(x => x != "カーボンローラー")
     )[0];
     let ret = filter_bukis(bukis, query);
     ret.query = query;
