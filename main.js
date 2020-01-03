@@ -166,9 +166,14 @@ client.on("message", message => {
       res = shuffle(res).map(buki => buki["name"]);
 
       let ret = `${query || ""}\n\`\`\``;
-      users.forEach((user, i) => {
+      {
+        let i = 0
+      users.forEach((user) => {
+        if (user.usernme == "turanegaku" && )
         ret += `\n${user.username}: ${res[i]}`;
+        i++
       });
+      }
       ret += "```";
       message.channel.send(ret);
       break;
