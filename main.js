@@ -17,13 +17,13 @@ const client = new discord.Client();
 
 const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
 
-const shuffle = ([...arr]) => {
-  let m = arr.length;
+Array.prototype.shuffle = () => {
+  let m = this.length;
   while (m) {
     const i = Math.floor(Math.random() * m--);
-    [arr[m], arr[i]] = [arr[i], arr[m]];
+    [this[m], this[i]] = [this[i], this[m]];
   }
-  return arr;
+  return this;
 };
 
 const headers = ["type", "sub", "special", "origin"];
@@ -32,12 +32,11 @@ function filter_bukis(bukis, query) {
   if (!query) return bukis;
 
   if (headers.indexOf(query) !== -1) {
-    query = shuffle(
-      bukis
-        .map(buki => buki[query])
-        .filter((x, i, self) => self.indexOf(x) === i)
-        .filter(x => x != "カーボンローラー")
-    )[0];
+    query = bukis
+      .map(buki => buki[query])
+      .filter((x, i, self) => self.indexOf(x) === i)
+      .filter(x => x != "カーボンローラー")
+      .shuffle()[0];
     let ret = filter_bukis(bukis, query);
     ret.query = query;
     return ret;
@@ -105,7 +104,7 @@ client.on("message", message => {
         message.channel.send("ブキがみつかりませんでした");
         return;
       }
-      res = shuffle(res).map(buki => buki["name"]);
+      res = res.map(buki => buki["name"]).shuffle();
 
       let ret = `${query || ""}\n\`\`\``;
       ret += res[0];
@@ -128,7 +127,7 @@ client.on("message", message => {
       }
       res = res.concat(res);
       while (res.length < n) res = res.concat(res);
-      res = shuffle(res).map(buki => buki["name"]);
+      res = res.map(buki => buki["name"]).shuffle();
 
       let ret = `${query || ""}\n\`\`\``;
       for (let i = 0; i < n; i++) {
@@ -158,7 +157,7 @@ client.on("message", message => {
       }
       res = res.concat(res);
       while (res.length < users.length) res = res.concat(res);
-      res = shuffle(res).map(buki => buki["name"]);
+      res = res.shuffle().map(buki => buki["name"]);
 
       let ret = `${query || ""}\n\`\`\``;
       {
@@ -194,10 +193,11 @@ client.on("message", message => {
 
       res = res.concat(res).concat(res);
       while (res.length < n) res = res.concat(res);
-      res = shuffle(res)
+      res = res
         .slice(0, n)
         .sort()
-        .map(v => v[1]);
+        .map(v => v[1])
+        .shuffle();
 
       let ret = "```";
       for (let i = 0; i < n; i++) {
