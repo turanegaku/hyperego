@@ -167,12 +167,14 @@ client.on("message", message => {
 
       let ret = `${query || ""}\n\`\`\``;
       {
-        let i = 0
-      users.forEach((user) => {
-        if (user.usernme == "turanegaku" && )
-        ret += `\n${user.username}: ${res[i]}`;
-        i++
-      });
+        let i = 0;
+        users.forEach(user => {
+          if (query != "カーボンローラー")
+            while (user.usernme == "turanegaku" && res[i].includes("カーボン"))
+              i++;
+          ret += `\n${user.username}: ${res[i]}`;
+          i++;
+        });
       }
       ret += "```";
       message.channel.send(ret);
