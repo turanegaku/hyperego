@@ -16,9 +16,9 @@ const discord = require("discord.js");
 const client = new discord.Client();
 
 const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
-const headers = Object.keys(bukis[0]);
+const headers = Object.keys(bukis[0]).slice(1);
 
-Array.prototype.shuffle = function () {
+Array.prototype.shuffle = function() {
   let m = this.length;
   while (m) {
     const i = Math.floor(Math.random() * m--);
@@ -26,9 +26,9 @@ Array.prototype.shuffle = function () {
   }
   return this;
 };
-Array.prototype.unique = function () {
-  return [...new Set(this)]
-}
+Array.prototype.unique = function() {
+  return [...new Set(this)];
+};
 
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
@@ -36,7 +36,7 @@ function filter_bukis(bukis, query) {
   if (headers.indexOf(query) !== -1) {
     query = bukis
       .map(buki => buki[query])
-      .filter((x, i, self) => self.indexOf(x) === i)  // unique
+      .filter((x, i, self) => self.indexOf(x) === i) // unique
       .filter(x => x != "カーボンローラー")
       .shuffle()[0];
     let ret = filter_bukis(bukis, query);
@@ -50,7 +50,6 @@ function filter_bukis(bukis, query) {
     if (tmp.length) return tmp;
   }
   tmp = bukis.filter(buki => buki["origin"].includes(query));
-  console.log(tmp)
   if (tmp.length) return tmp;
   return [];
 }
@@ -87,15 +86,13 @@ client.on("ready", message => {
 const prefix = "$";
 
 client.on("message", message => {
-  //botに反応しなくなる奴
   if (message.author.bot) return;
-  //argumentなどの処理
   if (message.content.indexOf(prefix) !== 0) return;
 
   const args = message.content
     .slice(prefix.length)
     .trim()
-    .split(/ +/g);
+    .split(/\s+/g);
   const command = args.shift().toLowerCase();
 
   switch (command) {
@@ -131,7 +128,6 @@ client.on("message", message => {
       res = res.concat(res);
       while (res.length < n) res = res.concat(res);
       res = res.map(buki => buki["name"]).shuffle();
-      console.log(res)
 
       let ret = `${query || ""}\n\`\`\``;
       for (let i = 0; i < n; i++) {
