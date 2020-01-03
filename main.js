@@ -17,7 +17,6 @@ const client = new discord.Client();
 
 const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
 const headers = Object.keys(bukis[0]);
-console.log(headers)
 
 Array.prototype.shuffle = function () {
   let m = this.length;
@@ -27,6 +26,9 @@ Array.prototype.shuffle = function () {
   }
   return this;
 };
+Array.prototype.unique = function () {
+  return [...new Set(this)]
+}
 
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
@@ -34,7 +36,7 @@ function filter_bukis(bukis, query) {
   if (headers.indexOf(query) !== -1) {
     query = bukis
       .map(buki => buki[query])
-      .filter((x, i, self) => self.indexOf(x) === i)
+      .filter((x, i, self) => self.indexOf(x) === i)  // unique
       .filter(x => x != "カーボンローラー")
       .shuffle()[0];
     let ret = filter_bukis(bukis, query);
@@ -48,6 +50,7 @@ function filter_bukis(bukis, query) {
     if (tmp.length) return tmp;
   }
   tmp = bukis.filter(buki => buki["origin"].includes(query));
+  console.log(tmp)
   if (tmp.length) return tmp;
   return [];
 }
