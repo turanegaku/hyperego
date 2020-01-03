@@ -16,8 +16,10 @@ const discord = require("discord.js");
 const client = new discord.Client();
 
 const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
+const headers = Object.keys(bukis[0]);
+console.log(headers)
 
-Array.prototype.shuffle = () => {
+Array.prototype.shuffle = function () {
   let m = this.length;
   while (m) {
     const i = Math.floor(Math.random() * m--);
@@ -25,8 +27,6 @@ Array.prototype.shuffle = () => {
   }
   return this;
 };
-
-const headers = ["type", "sub", "special", "origin"];
 
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
@@ -128,6 +128,7 @@ client.on("message", message => {
       res = res.concat(res);
       while (res.length < n) res = res.concat(res);
       res = res.map(buki => buki["name"]).shuffle();
+      console.log(res)
 
       let ret = `${query || ""}\n\`\`\``;
       for (let i = 0; i < n; i++) {
