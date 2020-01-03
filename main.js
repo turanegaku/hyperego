@@ -170,8 +170,8 @@ client.on("message", message => {
         let i = 0;
         users.forEach(user => {
           if (query != "カーボンローラー")
-            console.log(user.username, res[i].incudes("カーボン"))
-            while (user.usernme == "turanegaku" && res[i].includes("カーボン"))
+            console.log(user.username == "turanegaku", res[i].includes("カーボン"))
+            while (user.usernme == "turanegaku" && res[i].includes("カーボン")) {
               i++;
           ret += `\n${user.username}: ${res[i]}`;
           i++;
