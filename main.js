@@ -94,6 +94,7 @@ function random_buki(args, message, users) {
     let i = 0;
     users.forEach(user => {
       if (user instanceof discord.User) {
+        console.log(query)
         if (query != "カーボンローラー")
           while (user.username == "turanegaku" && res[i].includes("カーボン"))
             i++;
@@ -115,6 +116,7 @@ client.on("ready", message => {
 const prefix = "$";
 
 client.on("message", message => {
+  console.log(message)
   if (message.author.bot) return;
   if (message.content.indexOf(prefix) !== 0) return;
 
