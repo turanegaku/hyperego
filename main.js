@@ -169,7 +169,6 @@ client.on("message", message => {
       users.forEach((user, i) => {
         ret += `\n${user.username}: ${res[i]}`;
       });
-    ret += `\nももてん: ${res[users.length]}`;
       ret += "```";
       message.channel.send(ret);
       break;
