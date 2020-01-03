@@ -30,6 +30,29 @@ Array.prototype.unique = function() {
   return [...new Set(this)];
 };
 
+function help(channel) {
+  channel.send(
+    "```\n\
+$random [query]\n\
+  通話部屋にいる人で武器ランダム\n\
+  query: 一番左のを指定したときはそれもランダムで決める\n\
+    type | シューター | スピナー ...: 武器種類固定ランダム\n\
+    sub | クイックボム | スプリンクラー...: サブ固定ランダム\n\
+    special | スーパーチャクチ | ナイスダマ...: スペシャル固定ランダム\n\
+    origin | わかば | ハイドラ...: 派生武器のみでランダム(ex. わかば|もみじ|おちば)\n\
+      (originは部分文字列を許容する)\n\
+$arandom [query]\n\
+  一つだけ選出\n\
+$nrandom [num] [query]\n\
+  numつだけ選出\n\
+$di-salmon [num] (+)\n\
+  討伐禁止サーモン用\n\
+$help\n\
+  helpを表示\n\
+```"
+  );
+}
+
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
 
@@ -54,27 +77,33 @@ function filter_bukis(bukis, query) {
   return [];
 }
 
-function help(channel) {
-  channel.send(
-    "```\n\
-$random [query]\n\
-  通話部屋にいる人で武器ランダム\n\
-  query: 一番左のを指定したときはそれもランダムで決める\n\
-    type | シューター | スピナー ...: 武器種類固定ランダム\n\
-    sub | クイックボム | スプリンクラー...: サブ固定ランダム\n\
-    special | スーパーチャクチ | ナイスダマ...: スペシャル固定ランダム\n\
-    origin | わかば | ハイドラ...: 派生武器のみでランダム(ex. わかば|もみじ|おちば)\n\
-      (originは部分文字列を許容する)\n\
-$arandom [query]\n\
-  一つだけ選出\n\
-$nrandom [num] [query]\n\
-  numつだけ選出\n\
-$di-salmon [num] (+)\n\
-  討伐禁止サーモン用\n\
-$help\n\
-  helpを表示\n\
-```"
-  );
+function random_buki(args, message, users) {
+  let res = filter_bukis(bukis, args[0]);
+  let query = res.query;
+
+  if (!res.length) {
+    message.channel.send("ブキがみつかりませんでした");
+    return;
+  }
+  res = res.concat(res);
+  while (res.length < users.length) res = res.concat(res);
+  res = res.shuffle().map(buki => buki["name"]);
+
+  let ret = `${query || ""}\n\`\`\``;
+  {
+    let i = 0;
+    users.forEach(user => {
+      if (query != "カーボンローラー")
+        while (user.username == "turanegaku" && res[i].includes("カーボン"))
+          i++;
+      if (user instanceof discord.User) ret += `\n${user.username}: ${res[i]}`;
+      else
+        ret += `\n${user.username}: ${res[i]}`;
+      i++;
+    });
+  }
+  ret += "```";
+  message.channel.send(ret);
 }
 
 client.on("ready", message => {
@@ -147,31 +176,8 @@ client.on("message", message => {
       let users = message.member.voiceChannel.members
         .map(member => member.user)
         .filter(user => !user.bot);
+      random_buki(args, message, users);
 
-      let res = filter_bukis(bukis, args[0]);
-      let query = res.query;
-
-      if (!res.length) {
-        message.channel.send("ブキがみつかりませんでした");
-        return;
-      }
-      res = res.concat(res);
-      while (res.length < users.length) res = res.concat(res);
-      res = res.shuffle().map(buki => buki["name"]);
-
-      let ret = `${query || ""}\n\`\`\``;
-      {
-        let i = 0;
-        users.forEach(user => {
-          if (query != "カーボンローラー")
-            while (user.username == "turanegaku" && res[i].includes("カーボン"))
-              i++;
-          ret += `\n${user.username}: ${res[i]}`;
-          i++;
-        });
-      }
-      ret += "```";
-      message.channel.send(ret);
       break;
     }
     case "di-salmon": {
@@ -194,10 +200,10 @@ client.on("message", message => {
       res = res.concat(res).concat(res);
       while (res.length < n) res = res.concat(res);
       res = res
+        .shuffle()
         .slice(0, n)
         .sort()
-        .map(v => v[1])
-        .shuffle();
+        .map(v => v[1]);
 
       let ret = "```";
       for (let i = 0; i < n; i++) {
