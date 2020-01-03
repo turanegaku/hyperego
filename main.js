@@ -1,4 +1,4 @@
-const csv = require("csv");
+const parse = require("csv-parse/lib/sync");
 const fs = require("fs");
 const req = require("https");
 
@@ -15,12 +15,7 @@ http
 const discord = require("discord.js");
 const client = new discord.Client();
 
-let bukis;
-fs.createReadStream("buki.csv").pipe(
-  csv.parse({ columns: true }, (err, d) => {
-    bukis = d;
-  })
-);
+const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
 
 const shuffle = ([...arr]) => {
   let m = arr.length;

@@ -5,7 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "discord.js": "^11.5.1",
-    "csv": "^5.3.1"
+    "csv-parse": "^4.8.2"
   },
   "devDependencies": {},
   "scripts": {
