@@ -93,12 +93,12 @@ function random_buki(args, message, users) {
   {
     let i = 0;
     users.forEach(user => {
-      if (query != "カーボンローラー")
-        while (user.username == "turanegaku" && res[i].includes("カーボン"))
-          i++;
-      if (user instanceof discord.User) ret += `\n${user.username}: ${res[i]}`;
-      else
+      if (user instanceof discord.User) {
+        if (query != "カーボンローラー")
+          while (user.username == "turanegaku" && res[i].includes("カーボン"))
+            i++;
         ret += `\n${user.username}: ${res[i]}`;
+      } else ret += `\n${res[i]}`;
       i++;
     });
   }
@@ -126,19 +126,7 @@ client.on("message", message => {
 
   switch (command) {
     case "arandom": {
-      let res = filter_bukis(bukis, args[0]);
-      let query = res.query;
-
-      if (!res.length) {
-        message.channel.send("ブキがみつかりませんでした");
-        return;
-      }
-      res = res.map(buki => buki["name"]).shuffle();
-
-      let ret = `${query || ""}\n\`\`\``;
-      ret += res[0];
-      ret += "```";
-      message.channel.send(ret);
+      random_buki(args, message, [0]);
       break;
     }
     case "nrandom": {
@@ -147,23 +135,8 @@ client.on("message", message => {
         help(message.channel);
         return;
       }
-      let res = filter_bukis(bukis, args[1]);
-      let query = res.query;
 
-      if (!res.length) {
-        message.channel.send("ブキがみつかりませんでした");
-        return;
-      }
-      res = res.concat(res);
-      while (res.length < n) res = res.concat(res);
-      res = res.map(buki => buki["name"]).shuffle();
-
-      let ret = `${query || ""}\n\`\`\``;
-      for (let i = 0; i < n; i++) {
-        ret += `\n${res[i]}`;
-      }
-      ret += "```";
-      message.channel.send(ret);
+      random_buki(args.slice(1), message, Array.from({ length: n }));
       break;
     }
     case "random": {
@@ -176,8 +149,8 @@ client.on("message", message => {
       let users = message.member.voiceChannel.members
         .map(member => member.user)
         .filter(user => !user.bot);
-      random_buki(args, message, users);
 
+      random_buki(args, message, users);
       break;
     }
     case "di-salmon": {
