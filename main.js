@@ -35,14 +35,6 @@ const headers = ["type", "sub", "special", "origin"];
 
 function filter_bukis(bukis, query) {
   if (!query) return bukis;
-  if (Array.isArray(query)) {
-    const ret = [];
-    const mret = [];
-    for (let q of query) {
-      if (q[0] == "-") {
-      }
-    }
-  }
 
   if (headers.indexOf(query) !== -1) {
     query = shuffle(
@@ -177,6 +169,7 @@ client.on("message", message => {
       users.forEach((user, i) => {
         ret += `\n${user.username}: ${res[i]}`;
       });
+    ret += `\nももてん: ${res[users.length]}`;
       ret += "```";
       message.channel.send(ret);
       break;
