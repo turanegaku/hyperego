@@ -94,7 +94,7 @@ function random_buki(args, message, users) {
     let i = 0;
     users.forEach(user => {
       if (user instanceof discord.User) {
-        console.log(query)
+        console.log(query);
         if (query != "カーボンローラー")
           while (user.username == "turanegaku" && res[i].includes("カーボン"))
             i++;
@@ -116,7 +116,7 @@ client.on("ready", message => {
 const prefix = "$";
 
 client.on("message", message => {
-  console.log(message)
+  console.log(message);
   if (message.author.bot) return;
   if (message.content.indexOf(prefix) !== 0) return;
 
@@ -170,9 +170,12 @@ client.on("message", message => {
         [5, "モグラ"],
         [6, "コウモリ"]
       ];
-      if (args[1] == "+") res.push([7, "納品"]);
-
       res = res.concat(res).concat(res);
+      if (args[1] == "+") {
+        res.push([7, "納品"]);
+        res.push([8, "ZL"]);
+      }
+
       while (res.length < n) res = res.concat(res);
       res = res
         .shuffle()
