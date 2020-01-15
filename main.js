@@ -127,6 +127,8 @@ client.on("message", message => {
   const command = args.shift().toLowerCase();
 
   switch (command) {
+    case "ban": {
+    }
     case "arandom": {
       random_buki(args, message, [0]);
       break;
