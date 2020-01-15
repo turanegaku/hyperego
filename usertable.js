@@ -9,32 +9,28 @@ export class DBCommon {
   static get() {
     return database;
   }
+  
 }
 
 export class Buki {
-  constructor(name, server) {
-    this.buki = name;
-    this.server = server;
+  constructor(id, name, sub, special, type, origin) {
+    this.id = id
+    this.name = name
+    this.sub = sub
   }
 }
 
-const tableName = "bukis"
 
-export default class BanTable {
-  static async createTableIfNotExists() {
-    const db = DBCommon.get()
-    return new Promise((resolve, reject) => {
-      try {
-        db.serialize(() => {
-          db.run(`create table if not exists ${tableName} (
-            id text primary key,
-            name text,
-            email text
-          )`)
-        })
-        return resolve()
-      } catch (err) {
-        return reject(err)
-      }
-    })
+export class Sub {
+  constructor(id, name) {
+    this.id = id
+    this.name = name
   }
+}
+
+export class Special {
+  constructor(id, name) {
+    this.id = id
+    this.name = name
+  }
+}
