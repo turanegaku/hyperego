@@ -175,7 +175,7 @@ client.on("message", message => {
       res = res.concat(res).concat(res);
       if (args[1] == "+") {
         res.push([7, "納品"]);
-        res.push([8, "ZL"]);
+        res.push([8, "救助"]);
       }
 
       while (res.length < n) res = res.concat(res);
