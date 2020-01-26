@@ -176,6 +176,9 @@ client.on("message", message => {
       if (args[1] == "+") {
         res.push([7, "納品"]);
         res.push([8, "救助"]);
+        res.push([9, "デス"]);
+        res.push([9, "デス"]);
+        if (Math.random() < 0.1) res.push([10, "赤イクラ"]);
       }
 
       while (res.length < n) res = res.concat(res);
@@ -185,7 +188,7 @@ client.on("message", message => {
         .sort()
         .map(v => v[1]);
 
-      let ret = "```";
+      let ret = message.author.username + "```";
       for (let i = 0; i < n; i++) {
         ret += `\n${res[i]}`;
       }
