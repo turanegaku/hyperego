@@ -14,5 +14,8 @@
   "scripts": {
     "start": "node main.js",
     "test": "node main.js"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }

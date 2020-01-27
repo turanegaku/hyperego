@@ -19,8 +19,6 @@ const client = new discord.Client();
 const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
 const headers = Object.keys(bukis[0]).slice(1);
 
-console.log([].concat(Array(3).fill([4, 3])));
-
 Array.prototype.shuffle = function() {
   let m = this.length;
   while (m) {
@@ -37,7 +35,7 @@ let stopDate = moment().add(10, "m");
 setInterval(function() {
   if (moment() >= stopDate) clearInterval(this);
   request.get("https://hyperego.glitch.me/", (err, res, body) => {
-    console.log(body, moment());
+    console.log(stopDate);
   });
 }, 1000 * 60 * 3);
 
