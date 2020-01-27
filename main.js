@@ -17,7 +17,7 @@ const discord = require("discord.js");
 const client = new discord.Client();
 
 const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
-const headers = Object.keys(bukis[0]).slice(1);k
+const headers = Object.keys(bukis[0]).slice(1);
 
 Array.prototype.shuffle = function() {
   let m = this.length;
@@ -138,11 +138,11 @@ client.on("message", message => {
   const command = args.shift().toLowerCase();
 
   stopDate = moment().add(10, "m");
-  console.log(stopDate.format())
+  console.log(stopDate.format());
 
   switch (command) {
     case "ban": {
-      console.log(message.channel.guild.id)
+      console.log(message.channel.guild.id);
       break;
     }
     case "arandom": {
