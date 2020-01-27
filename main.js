@@ -35,7 +35,7 @@ let stopDate = moment().add(10, "m");
 setInterval(function() {
   if (moment() >= stopDate) clearInterval(this);
   request.get("https://hyperego.glitch.me/", (err, res, body) => {
-    console.log(stopDate);
+    console.log(stopDate.format());
   });
 }, 1000 * 60 * 3);
 
@@ -127,7 +127,7 @@ client.on("ready", message => {
 const prefix = "$";
 
 client.on("message", message => {
-  console.log(message);
+  // console.log(message);
   if (message.author.bot) return;
   if (message.content.indexOf(prefix) !== 0) return;
 
@@ -138,9 +138,11 @@ client.on("message", message => {
   const command = args.shift().toLowerCase();
 
   stopDate = moment().add(10, "m");
+  console.log(stopDate.format())
 
   switch (command) {
     case "ban": {
+      console.log(message.channel.guild.id)
       break;
     }
     case "arandom": {
