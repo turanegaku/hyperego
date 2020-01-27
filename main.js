@@ -30,6 +30,10 @@ Array.prototype.unique = function() {
   return [...new Set(this)];
 };
 
+setTimeInterval(() => {
+  c
+}, 100)
+
 function help(channel) {
   channel.send(
     "```\n\
@@ -85,17 +89,18 @@ function random_buki(args, message, users) {
     message.channel.send("ブキがみつかりませんでした");
     return;
   }
-  Array(Math.ceil())
-  res = res.concat(res);
-  while (res.length < users.length) res = res.concat(res);
-  res = res.shuffle().map(buki => buki["name"]);
+  let rep = Math.max(Math.ceil(users.length / res.length), 2);
+  res = Array(rep)
+    .fill(res)
+    .flat()
+    .shuffle()
+    .map(buki => buki["name"]);
 
   let ret = `${query || ""}\n\`\`\``;
   {
     let i = 0;
     users.forEach(user => {
       if (user instanceof discord.User) {
-        console.log(query);
         if (query != "カーボンローラー")
           while (user.username == "turanegaku" && res[i].includes("カーボン"))
             i++;
@@ -173,7 +178,12 @@ client.on("message", message => {
         [5, "モグラ"],
         [6, "コウモリ"]
       ];
-      res = res.concat(res).concat(res);
+
+      let rep = Math.max(Math.ceil(n / res.length), 3);
+      res = Array(rep)
+        .fill(res)
+        .flat();
+
       if (args[1] == "+") {
         res.push([7, "納品"]);
         res.push([8, "デス"]);
@@ -181,7 +191,6 @@ client.on("message", message => {
         if (Math.random() < 0.1) res.push([10, "赤イクラ"]);
       }
 
-      while (res.length < n) res = res.concat(res);
       res = res
         .shuffle()
         .slice(0, n)
