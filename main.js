@@ -17,7 +17,7 @@ const discord = require("discord.js");
 const client = new discord.Client();
 
 const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
-const headers = Object.keys(bukis[0]).slice(1);
+const headers = Object.keys(bukis[0]).slice(1);k
 
 Array.prototype.shuffle = function() {
   let m = this.length;
