@@ -1,8 +1,7 @@
 const parse = require("csv-parse/lib/sync");
 const fs = require("fs");
 const moment = require("moment");
-const request = require('request');
-
+const request = require("request");
 
 // Response for Uptime Robot
 const http = require("http");
@@ -20,7 +19,7 @@ const client = new discord.Client();
 const bukis = parse(fs.readFileSync("buki.csv"), { columns: true });
 const headers = Object.keys(bukis[0]).slice(1);
 
-console.log(Array(3).fill([3, 2]).flat())
+console.log([].concat(Array(3).fill([4, 3])));
 
 Array.prototype.shuffle = function() {
   let m = this.length;
@@ -37,10 +36,9 @@ Array.prototype.unique = function() {
 let stopDate = moment().add(10, "m");
 setInterval(function() {
   if (moment() >= stopDate) clearInterval(this);
-  request.get('https://hyperego.glitch.me/', (err, res, body) => {
-  console.log(body, moment());
-});
-
+  request.get("https://hyperego.glitch.me/", (err, res, body) => {
+    console.log(body, moment());
+  });
 }, 1000 * 60 * 3);
 
 function help(channel) {
@@ -140,12 +138,12 @@ client.on("message", message => {
     .trim()
     .split(/\s+/g);
   const command = args.shift().toLowerCase();
-  
+
   stopDate = moment().add(10, "m");
 
   switch (command) {
     case "ban": {
-      break
+      break;
     }
     case "arandom": {
       random_buki(args, message, [0]);
