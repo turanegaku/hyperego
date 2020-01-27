@@ -39,8 +39,8 @@ $random [query]\n\
     type | シューター | スピナー ...: 武器種類固定ランダム\n\
     sub | クイックボム | スプリンクラー...: サブ固定ランダム\n\
     special | スーパーチャクチ | ナイスダマ...: スペシャル固定ランダム\n\
-    origin | わかば | ハイドラ...: 派生武器のみでランダム(ex. わかば|もみじ|おちば)\n\
-      (originは部分文字列を許容する)\n\
+    main | わかば | ハイドラ...: 派生武器のみでランダム(ex. わかば|もみじ|おちば)\n\
+      (mainは部分文字列を許容する)\n\
 $arandom [query]\n\
   一つだけ選出\n\
 $nrandom [num] [query]\n\
@@ -72,7 +72,7 @@ function filter_bukis(bukis, query) {
     tmp = bukis.filter(buki => buki[header] == query);
     if (tmp.length) return tmp;
   }
-  tmp = bukis.filter(buki => buki["origin"].includes(query));
+  tmp = bukis.filter(buki => buki["main"].includes(query));
   if (tmp.length) return tmp;
   return [];
 }
@@ -85,6 +85,7 @@ function random_buki(args, message, users) {
     message.channel.send("ブキがみつかりませんでした");
     return;
   }
+  Array(Math.ceil())
   res = res.concat(res);
   while (res.length < users.length) res = res.concat(res);
   res = res.shuffle().map(buki => buki["name"]);
@@ -175,9 +176,8 @@ client.on("message", message => {
       res = res.concat(res).concat(res);
       if (args[1] == "+") {
         res.push([7, "納品"]);
-        res.push([8, "救助"]);
-        res.push([9, "デス"]);
-        res.push([9, "デス"]);
+        res.push([8, "デス"]);
+        if (Math.random() < 0.5) res.push([9, "救助"]);
         if (Math.random() < 0.1) res.push([10, "赤イクラ"]);
       }
 
