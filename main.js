@@ -37,7 +37,7 @@ setInterval(function() {
   request.get("https://hyperego.glitch.me/", (err, res, body) => {
     console.log(stopDate.format());
   });
-}, 1000 * 60 * 3);
+}, 1000 * 60 * 5);
 
 function help(channel) {
   channel.send(
