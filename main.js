@@ -199,6 +199,7 @@ client.on("message", message => {
         res.push([8, "デス"]);
         if (Math.random() < 0.5) res.push([9, "救助"]);
         if (Math.random() < 0.1) res.push([10, "赤イクラ"]);
+        if (Math.random() < 0.2) res.push([11, "スペシャル"])
       }
 
       res = res
