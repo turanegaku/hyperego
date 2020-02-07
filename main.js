@@ -8,9 +8,9 @@ app.get("/", (req, res) => {
   res.send("Discord bot is active now");
 });
 
-app.get("/img", (req, res) => {
-  console.log(req.params)
-  res.status(200).send('ok')
+app.get("/sake", (req, res) => {
+  console.log(req.query)
+  res.status(200).sendFile(`${__dirname}/resources/sake6.png`)
 });
 
 require("./bot");
