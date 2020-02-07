@@ -4,9 +4,12 @@ const moment = require("moment");
 const request = require("request");
 
 // Response for Uptime Robot
-const http = require("http");
+const express = require("express");
+const app = express();
+
 http
   .createServer(function(request, response) {
+  console.log(request.url, request.method)
     response.writeHead(200, { "Content-Type": "text/plain" });
     response.end("Discord bot is active now \n");
   })
@@ -41,24 +44,24 @@ setInterval(function() {
 
 function help(channel) {
   channel.send(
-    "```\n\
-$random [query]\n\
-  通話部屋にいる人で武器ランダム\n\
-  query: 一番左のを指定したときはそれもランダムで決める\n\
-    type | シューター | スピナー ...: 武器種類固定ランダム\n\
-    sub | クイックボム | スプリンクラー...: サブ固定ランダム\n\
-    special | スーパーチャクチ | ナイスダマ...: スペシャル固定ランダム\n\
-    main | わかば | ハイドラ...: 派生武器のみでランダム(ex. わかば|もみじ|おちば)\n\
-      (mainは部分文字列を許容する)\n\
-$arandom [query]\n\
-  一つだけ選出\n\
-$nrandom [num] [query]\n\
-  numつだけ選出\n\
-$di-salmon [num] (+)\n\
-  討伐禁止サーモン用\n\
-$help\n\
-  helpを表示\n\
-```"
+    `\`\`\`
+$random [query]
+  通話部屋にいる人で武器ランダム
+  query: 一番左のを指定したときはそれもランダムで決める
+    type | シューター | スピナー ...: 武器種類固定ランダム
+    sub | クイックボム | スプリンクラー...: サブ固定ランダム
+    special | スーパーチャクチ | ナイスダマ...: スペシャル固定ランダム
+    main | わかば | ハイドラ...: 派生武器のみでランダム(ex. わかば|もみじ|おちば)
+      (mainは部分文字列を許容する)
+$arandom [query]
+  一つだけ選出
+$nrandom [num] [query]
+  numつだけ選出
+$di-salmon [num] (+)
+  討伐禁止サーモン用
+$help
+  helpを表示
+\`\`\``
   );
 }
 
