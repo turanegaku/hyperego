@@ -92,8 +92,10 @@ function random_buki(args, message, users) {
     users.forEach(user => {
       if (user instanceof discord.User) {
         if (query != "カーボンローラー")
-          while (user.username == "turanegaku" && res[i].includes("カーボン"))
+          while (user.username == "turanegaku" && res[i].includes("カーボン")) {
+            res.push(res[i]);
             i++;
+          }
         ret += `\n${user.username}: ${res[i]}`;
       } else ret += `\n${res[i]}`;
       i++;
