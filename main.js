@@ -1,19 +1,16 @@
 const parse = require("csv-parse/lib/sync");
 const fs = require("fs");
-const moment = require("moment");
-const request = require("request");
+const uptimereboot = require("./uptimereboot");
 
 // Response for Uptime Robot
 const express = require("express");
 const app = express();
+const port = process.env.PORT || 8080;
+app.listen(port);
 
-http
-  .createServer(function(request, response) {
-  console.log(request.url, request.method)
-    response.writeHead(200, { "Content-Type": "text/plain" });
-    response.end("Discord bot is active now \n");
-  })
-  .listen(8080);
+app.get("/", (req, res) => {
+  res.send("Discord bot is active now");
+});
 
 // Discord bot implements
 const discord = require("discord.js");
@@ -33,14 +30,6 @@ Array.prototype.shuffle = function() {
 Array.prototype.unique = function() {
   return [...new Set(this)];
 };
-
-let stopDate = moment().add(10, "m");
-setInterval(function() {
-  if (moment() >= stopDate) clearInterval(this);
-  request.get("https://hyperego.glitch.me/", (err, res, body) => {
-    console.log(stopDate.format());
-  });
-}, 1000 * 60 * 5);
 
 function help(channel) {
   channel.send(
@@ -140,8 +129,7 @@ client.on("message", message => {
     .split(/\s+/g);
   const command = args.shift().toLowerCase();
 
-  stopDate = moment().add(10, "m");
-  console.log(stopDate.format());
+  uptimereboot();
 
   switch (command) {
     case "ban": {
@@ -202,7 +190,7 @@ client.on("message", message => {
         res.push([8, "デス"]);
         if (Math.random() < 0.5) res.push([9, "救助"]);
         if (Math.random() < 0.1) res.push([10, "赤イクラ"]);
-        if (Math.random() < 0.2) res.push([11, "スペシャル"])
+        if (Math.random() < 0.2) res.push([11, "スペシャル"]);
       }
 
       res = res
